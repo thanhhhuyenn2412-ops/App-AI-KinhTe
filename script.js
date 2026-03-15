@@ -15,41 +15,44 @@ async function generateContent() {
     const resultArea = document.getElementById('resultArea');
     const aiResponse = document.getElementById('aiResponse');
 
-    // Hiển thị loader và ẩn vùng kết quả cũ
     loader.classList.remove('hidden');
     resultArea.classList.add('hidden');
 
-    const prompt = `Bạn là chuyên gia marketing. Hãy viết mô tả sản phẩm cho: ${name}. Tính năng: ${features}. SEO: ${seo}. Yêu cầu: Viết hấp dẫn, có gạch đầu dòng và lời kêu gọi mua hàng.`;
+    const promptText = `Bạn là chuyên gia marketing. Hãy viết mô tả sản phẩm hấp dẫn cho: ${name}. Tính năng: ${features}. SEO: ${seo}.`;
 
     try {
         const response = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: promptText }]
+                }]
+            })
         });
 
         const data = await response.json();
         
-        if (data.candidates && data.candidates[0].content.parts[0].text) {
-            const text = data.candidates[0].content.parts[0].text;
-            aiResponse.innerText = text;
-            // HIỆN VÙNG KẾT QUẢ
+        // Kiểm tra xem AI có trả về lỗi an toàn hoặc giới hạn không
+        if (data.candidates && data.candidates[0].content) {
+            aiResponse.innerText = data.candidates[0].content.parts[0].text;
             resultArea.classList.remove('hidden');
+        } else if (data.error) {
+            alert("Lỗi API: " + data.error.message);
         } else {
-            throw new Error("AI không trả về kết quả.");
+            alert("AI từ chối trả lời hoặc hết hạn ngạch (Quota). Hãy thử lại sau 1 phút.");
         }
 
     } catch (error) {
-        console.error(error);
-        alert("Lỗi rồi: " + error.message);
+        alert("Lỗi kết nối mạng: " + error.message);
     } finally {
-        // ẨN LOADER
         loader.classList.add('hidden');
     }
 }
 
 function copyContent() {
     const content = document.getElementById('aiResponse').innerText;
-    navigator.clipboard.writeText(content);
-    alert("Đã sao chép nội dung thành công! ✅");
+    navigator.clipboard.writeText(content).then(() => {
+        alert("Đã sao chép nội dung! ✅");
+    });
 }
