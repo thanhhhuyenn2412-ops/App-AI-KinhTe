@@ -1,5 +1,6 @@
 const API_KEY = "AIzaSyAAJiluH3e2MOyhdEHKH45YBMPL8966zpQ"; 
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+// Đã sửa URL từ v1beta sang v1 để tương thích với model gemini-1.5-flash
+const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
 async function generateContent() {
     const name = document.getElementById('productName').value;
@@ -33,18 +34,19 @@ async function generateContent() {
 
         const data = await response.json();
         
-        // Kiểm tra xem AI có trả về lỗi an toàn hoặc giới hạn không
         if (data.candidates && data.candidates[0].content) {
             aiResponse.innerText = data.candidates[0].content.parts[0].text;
             resultArea.classList.remove('hidden');
         } else if (data.error) {
-            alert("Lỗi API: " + data.error.message);
+            // Hiển thị lỗi cụ thể nếu có để dễ xử lý
+            console.error(data.error);
+            alert("Lỗi từ Google: " + data.error.message);
         } else {
-            alert("AI từ chối trả lời hoặc hết hạn ngạch (Quota). Hãy thử lại sau 1 phút.");
+            alert("AI chưa trả về kết quả. Vui lòng thử lại sau giây lát.");
         }
 
     } catch (error) {
-        alert("Lỗi kết nối mạng: " + error.message);
+        alert("Lỗi kết nối: " + error.message);
     } finally {
         loader.classList.add('hidden');
     }
@@ -53,6 +55,6 @@ async function generateContent() {
 function copyContent() {
     const content = document.getElementById('aiResponse').innerText;
     navigator.clipboard.writeText(content).then(() => {
-        alert("Đã sao chép nội dung! ✅");
+        alert("Đã sao chép nội dung thành công! ✅");
     });
 }
