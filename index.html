@@ -1,45 +1,68 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI E-commerce Assistant | Final Project</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI E-commerce Assistant</title>
+
+<meta name="description" content="AI tạo mô tả sản phẩm cho website bán hàng">
+
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <h1>🚀 AI Product Describer</h1>
-            <p>Tạo mô tả sản phẩm kinh doanh chuyên nghiệp</p>
-        </header>
 
-        <div class="form-container">
-            <div class="input-field">
-                <label for="productName">Tên sản phẩm</label>
-                <input type="text" id="productName" placeholder="Ví dụ: Giày Chạy Bộ Nam Pro">
-            </div>
+<div class="container">
 
-            <div class="input-field">
-                <label for="features">Tính năng & Đặc điểm</label>
-                <textarea id="features" rows="4" placeholder="Ví dụ: Đế cao su, vải thoáng khí..."></textarea>
-            </div>
+<header>
+<h1>🚀 AI Product Describer</h1>
+<p>Tạo mô tả sản phẩm kinh doanh chuyên nghiệp</p>
+</header>
 
-            <div class="input-field">
-                <label for="seoKeywords">Từ khóa SEO</label>
-                <input type="text" id="seoKeywords" placeholder="Ví dụ: giày nam, chạy bộ, bền bỉ">
-            </div>
+<div class="form-container">
 
-            <button id="generateBtn" onclick="generateContent()">Tạo mô tả ngay ✨</button>
-        </div>
+<div class="input-field">
+<label for="productName">Tên sản phẩm</label>
+<input type="text" id="productName" placeholder="Ví dụ: Giày Chạy Bộ Nam Pro">
+</div>
 
-        <div id="loader" class="hidden">🤖 AI đang suy nghĩ, vui lòng đợi...</div>
+<div class="input-field">
+<label for="features">Tính năng & Đặc điểm</label>
+<textarea id="features" rows="4" placeholder="Ví dụ: Đế cao su, vải thoáng khí..."></textarea>
+</div>
 
-        <div id="resultArea" class="hidden">
-            <h3>Kết quả mô tả:</h3>
-            <div id="aiResponse"></div>
-            <button class="copy-btn" onclick="copyContent()">Sao chép nội dung 📋</button>
-        </div>
-    </div>
-    <script src="script.js"></script>
+<div class="input-field">
+<label for="seoKeywords">Từ khóa SEO</label>
+<input type="text" id="seoKeywords" placeholder="Ví dụ: giày nam, chạy bộ, bền bỉ">
+</div>
+
+<button id="generateBtn" onclick="generateContent()">
+Tạo mô tả ngay ✨
+</button>
+
+</div>
+
+<div id="loader" class="hidden">
+🤖 AI đang suy nghĩ, vui lòng đợi...
+</div>
+
+<div id="resultArea" class="hidden">
+
+<h3>Kết quả mô tả:</h3>
+
+<div id="aiResponse"></div>
+
+<button class="copy-btn" onclick="copyContent()">
+Sao chép nội dung 📋
+</button>
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
