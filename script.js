@@ -1,6 +1,6 @@
 const API_KEY = "AIzaSyAAJiluH3e2MOyhdEHKH45YBMPL8966zpQ"; 
-// ĐỊA CHỈ URL CHUẨN ĐỂ KHÔNG BỊ LỖI "NOT FOUND":
-const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+// URL này đã bỏ 'v1beta' để tránh lỗi không tìm thấy model
+const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`;
 
 async function generateContent() {
     const name = document.getElementById('productName').value;
@@ -24,25 +24,27 @@ async function generateContent() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: `Viết mô tả bán hàng cho sản phẩm: ${name}. Đặc điểm: ${features}. Từ khóa: ${seo}` }] }]
+                contents: [{ parts: [{ text: `Viết mô tả sản phẩm hấp dẫn cho: ${name}. Tính năng: ${features}. SEO: ${seo}` }] }]
             })
         });
 
         const data = await response.json();
+        
         if (data.candidates && data.candidates[0].content) {
             aiResponse.innerText = data.candidates[0].content.parts[0].text;
             resultArea.classList.remove('hidden');
         } else {
-            alert("Lỗi: " + (data.error ? data.error.message : "AI không phản hồi"));
+            // Nếu vẫn lỗi, nó sẽ hiện lý do cụ thể ở đây
+            alert("Lỗi từ Google: " + (data.error ? data.error.message : "AI bận, thử lại sau 10 giây"));
         }
     } catch (error) {
-        alert("Lỗi kết nối mạng!");
+        alert("Lỗi mạng, hãy kiểm tra kết nối!");
     } finally {
         loader.classList.add('hidden');
     }
 }
 
 function copyContent() {
-    const content = document.getElementById('aiResponse').innerText;
-    navigator.clipboard.writeText(content).then(() => alert("Đã sao chép! ✅"));
+    const text = document.getElementById('aiResponse').innerText;
+    navigator.clipboard.writeText(text).then(() => alert("Đã copy! ✅"));
 }
