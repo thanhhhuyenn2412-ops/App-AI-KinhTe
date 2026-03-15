@@ -1,5 +1,5 @@
 const API_KEY = "AIzaSyAAJiluH3e2MOyhdEHKH45YBMPL8966zpQ"; 
-// Đã sửa URL từ v1beta sang v1 để tương thích với model gemini-1.5-flash
+// ĐỊA CHỈ URL CHUẨN ĐỂ KHÔNG BỊ LỖI "NOT FOUND":
 const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
 async function generateContent() {
@@ -8,7 +8,7 @@ async function generateContent() {
     const seo = document.getElementById('seoKeywords').value;
 
     if (!name || !features) {
-        alert("Vui lòng nhập tên và tính năng sản phẩm!");
+        alert("Vui lòng nhập tên và tính năng!");
         return;
     }
 
@@ -19,34 +19,24 @@ async function generateContent() {
     loader.classList.remove('hidden');
     resultArea.classList.add('hidden');
 
-    const promptText = `Bạn là chuyên gia marketing. Hãy viết mô tả sản phẩm hấp dẫn cho: ${name}. Tính năng: ${features}. SEO: ${seo}.`;
-
     try {
         const response = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: promptText }]
-                }]
+                contents: [{ parts: [{ text: `Viết mô tả bán hàng cho sản phẩm: ${name}. Đặc điểm: ${features}. Từ khóa: ${seo}` }] }]
             })
         });
 
         const data = await response.json();
-        
         if (data.candidates && data.candidates[0].content) {
             aiResponse.innerText = data.candidates[0].content.parts[0].text;
             resultArea.classList.remove('hidden');
-        } else if (data.error) {
-            // Hiển thị lỗi cụ thể nếu có để dễ xử lý
-            console.error(data.error);
-            alert("Lỗi từ Google: " + data.error.message);
         } else {
-            alert("AI chưa trả về kết quả. Vui lòng thử lại sau giây lát.");
+            alert("Lỗi: " + (data.error ? data.error.message : "AI không phản hồi"));
         }
-
     } catch (error) {
-        alert("Lỗi kết nối: " + error.message);
+        alert("Lỗi kết nối mạng!");
     } finally {
         loader.classList.add('hidden');
     }
@@ -54,7 +44,5 @@ async function generateContent() {
 
 function copyContent() {
     const content = document.getElementById('aiResponse').innerText;
-    navigator.clipboard.writeText(content).then(() => {
-        alert("Đã sao chép nội dung thành công! ✅");
-    });
+    navigator.clipboard.writeText(content).then(() => alert("Đã sao chép! ✅"));
 }
